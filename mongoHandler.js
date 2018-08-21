@@ -27,7 +27,7 @@ class mongoHandler {
                 avatar: user.avatar
             });
             
-            newUser.save();
+            newUser.save().catch(err => reject(Error(err)));
 
             //checking to see if there is at least one chat in the domain. if not, create one
             chats.findOne({ title: 'lobby' }).sort('-created')
@@ -43,13 +43,13 @@ class mongoHandler {
                         users: [mongoose.Types.ObjectId(newUser._id)]
                     });
 
-                    lobby.save()
+                    lobby.save().catch(err => reject(Error(err)));
                     resolve({ user: newUser , chat:lobby })
 
                 } else {
                     // if the chat exist we add the new user to its user's array
                     chat.users.push(mongoose.Types.ObjectId(newUser._id));
-                    chat.save()
+                    chat.save().catch(err => reject(Error(err)));
                     resolve({ user:newUser , chat: chat })
 
                 }
@@ -71,7 +71,7 @@ class mongoHandler {
             chats.findById(chatId)
             .then((chat) => {
                 chat.users.push(mongoose.Types.ObjectId(userId));
-                chat.save()
+                chat.save().catch(err => reject(Error(err)));
                 resolve(chat)
             })
             .catch((err) => reject(Error(err)))
@@ -83,7 +83,7 @@ class mongoHandler {
             chats.findById(chatId)
             .then((chat) => {
                 chat.users.pull(mongoose.Types.ObjectId(userId));
-                chat.save()
+                chat.save().catch(err => reject(Error(err)));
                 resolve(chat.users)
             })
             .catch((err) => reject(Error(err)))
@@ -100,7 +100,7 @@ class mongoHandler {
                 users: [chatOptions.by.userId]
             });
 
-            newChat.save()
+            newChat.save().catch(err => reject(Error(err)));
             resolve(newChat)
         })
         .catch((err) => reject(Error(err)))
