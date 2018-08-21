@@ -7,15 +7,7 @@ class mongoHandler {
     constructor(host, domain, options){
         this.db = mongoose.connect(`${host}${domain}`, options)
     }
-/*
-    init(){
-        return new Promise((resolve, reject) => {
-            mongoose.connection.db.dropDatabase()
-            .then(() => resolve(true))
-            .catch((err) => reject(Error(err)))
-        })
-    }
-*/
+
     createUser(user){
         return new Promise((resolve, reject) =>{
 
