@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv='Content-Type' content='text/html; charset=utf-8'/>
+        <script src='service-worker.js'></script>
+        <script>
+            // prevents hosting providers to host this website inside an iframe:
+            if ( window.self !== window.top ) window.top.location.href = window.location.href
+            
+            /*
+            * we want to activate the service worker right away without waiting for 
+            * a navigation event. So we add an 'onstatechange' event listener to installingWorker
+            * when "installingWorker.state == 'installed'" we refresh the broweser to simulate 
+            * a navigaton event 
+            */
+
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.register('service-worker.js').then((reg) => {
+                    reg.onupdatefound = () => {
+                        let installingWorker = reg.installing;
+                        return installingWorker.onstatechange = () => {
+                            if (installingWorker.state == 'installed') return location.reload(false)
+                            return
+                        } 
+                    };
+                }).catch((error) => console.error('Error during service worker registration:', error))
+                
+            } else {
+
+                window.onload = () => 
+                    document.getElementsByTagName('body').innerHTML = 
+                    `<h1>Welcome to Carousel</h1>
+                    <p>if you see this message then your broweser does not support Javascript><br>
+                        or service workers. <br>
+                        <br>
+                    this website uses a service worker so for best performance open this site<br>
+                    with chrome or safari. 
+                    </p>`;
+                };
+            
+        </script>
+        <meta name='author' content='Ohav Ben Yanai'>
+        <meta name='apple-mobile-web-app-capable' content='yes'>
+        <meta name='apple-mobile-web-app-status-bar-style' content='black'>
+        <meta name='viewport' content='width=device-width, initial-scale=1.0, user-scalable=no, shrink-to-fit=no'> 
+        <meta name='description' content='Online Chat room Application'>
+        <meta name='theme-color' content='#0072ff'>
+        
+        <link rel='manifest' href='manifest.json'/>
+        <link rel='shortcut icon' href='https://res.cloudinary.com/carousel/image/upload/v1494491706/ExhibitsIconsPlaces_Carousel_Small_005_u4qvys.jpg'>
+        <script src = 'dbs.js'></script>
+        <script type='module' src='main.mjs'></script>
+        <script src='webTorrent.min.js'></script>
+        <script type='module'>
+            'use strict';
+
+                import { 
+                    registrationPane,
+                    css_prefix, 
+                    icons, 
+                    css_rules, 
+                    chat, 
+                    set_style_sheet,
+                    set_user_inputs,
+                    set_controller, 
+                    angle, 
+                    debounce,
+                    throttle,
+                    storageAvailable,
+                    dbInit
+                } from './main.mjs';
+
+                ((() => {    
+                    
+                    window.onload = () => {
+                        console.log('web page loaded')
+                        //dbInit()
+
+                        if (!storageAvailable('localStorage')) console.log('storage not available')
+                        
+                        if (navigator.serviceWorker) {
+
+                            const APP = {
+
+                                style_sheet:new set_style_sheet(css_rules),
+
+                                controller: new set_controller(),
+
+                                //service_worker: new set_service_worker(),
+
+                                touch_input:new set_user_inputs()
+                            }//setTimeout(()=> {console.log('worker: ' , APP.service_worker.msg())},1000)
+
+                            Object.keys(APP).map((objectKey) => (objectKey !=='controller')?APP.controller.register(objectKey, APP[objectKey]):null);
+
+                            /*navigator.serviceWorker.controller.postMessage('init');
+                            setTimeout(()=> navigator.serviceWorker.controller.postMessage({
+                                    type:'register new user',
+                                    data: { userName:'Ohav' }
+                            }),2000)
+                            
+                            //navigator.serviceWorker.controller.postMessage('hi from browser');
+                            */console.log(navigator)
+
+                            navigator.serviceWorker.addEventListener('message',(event) => console.log(event))
+                        } else {
+                            console.log('no service worker yet')
+                        }
+                    }
+
+                })());
+        </script>
+        <title>Carousel</title>
+    </head>
+    <body>
+        <!--we use this hidden dpi div to find the size of the screen in intches-->
+        <div id='dpi' style='height: 1in; width: 1in; left: 100%; position: fixed; top: 100%;'></div>
+        <div id = 'wrapper'>
+            <!--<div id = 'side_bar'></div>
+            <div id = 'carousel'>
+                <div id = 'cube'></div>
+            </div>-->
+        </div>
+    </body>
+</html>
+
+
+
