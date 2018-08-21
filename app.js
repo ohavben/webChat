@@ -50,20 +50,12 @@ const App = new mongoHandler('mongodb://localhost:27017/', 'Carousel', { useNewU
 const WebSocket = require('ws').Server;
 const wss = new WebSocket({ server: server });
 
-
-/*
-App.init('localhost:8000')
-    .then((res) => console.log(`db intitated: ${res}`))
-    .catch((err) => console.log(`db Not initiated: ${err}`))
-*/
-
 wss.broadcast = (message , users , sender) => 
     Array.from(wss.clients)  // transforming wss.clients which is a set into an array 
     .filter(client => client.user_id !== sender) // filtering the original sender
     .filter(client => client.readyState == 1) // filtering closed sockets
     .filter(client => users.map(userId => String(userId)).includes(String(client.user_id))) //checking if the user (socket) is in the chat
-    .forEach(client =>  client.send(JSON.stringify(message))
-)
+    .forEach(client =>  client.send(JSON.stringify(message)))
 
 
 wss.on('connection', (ws, req) => {
@@ -175,14 +167,15 @@ wss.on('connection', (ws, req) => {
 
             case 'private_chat_accepted': 
             return 
-
+            
+            case 'client closed': 
+            return ws.terminate()
+              
             default: return
         }
     })
 
     function deleteUser(user_id, userName){
-        console.log('delete user: ' , user_id)
-        //if (!user_id) return
         return App.deleteUser(ws.user_id)
         .then(chats => 
             chats.forEach(chat =>
