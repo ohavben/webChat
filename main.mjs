@@ -36,13 +36,13 @@ export const icons = {
 
 export const css_rules = {
 
-    'button':`{
-        width:100%;
-        height:100%;
+    '.footerButton > button':`{
+        width: calc(carouselWidth/9);
+        height:calc(0.30*footerHeight);
         display: block;
-        position: relative;
+        position: absolute;
         margin: 0 auto;
-        opacity:1;
+        opacity:0.01;
         z-index:15;
     }`,
 
@@ -401,8 +401,9 @@ export const css_rules = {
     }`,
 
     '.footerButton':`{;
-        width: calc(carouselWidth/8);
+        width: calc(carouselWidth/9);
         height:calc(0.30*footerHeight);
+        top: calc(0.066 *footerHeight);
         position: absolute;
         display: block;
         z-index:5;
@@ -412,28 +413,28 @@ export const css_rules = {
   * How to get all the footer buttons lined up nicely and equaly without using display:inline-block and text-align: center
   * 
   * The parent div length is `carouselWidth. `There are 6 buttons. Each button width is: carouselWidth/8 . 
-  * To find all the margins: carouselWidth - 6 * carouselWidth/8 ==> 0.25 * carouselWidth . 
+  * To find all the margins: carouselWidth - 6 * carouselWidth/9 ==> 0.33 * carouselWidth . 
   * because there are 6 buttons there are 7 empty areas ( one also on the right side),
   * the general formula for each button margin is: 
   * 
-  * (buttonNumber * 0.25/((howManyButtons + 1) * 2) * carouselWidth) + (buttonNumber-1)(carouselWidth/8)
+  * (buttonNumber * 0.33/((howManyButtons + 1) * 2) * carouselWidth) + (buttonNumber-1)(carouselWidth/9)
   * 
-  * So the first button is: left:calc( 0.25/14 * carouselWidth) 
-  * The second is: left:calc((2 * 0.25/14 * carouselWidth) + (carouselWidth/8)) .... and so on.
+  * So the first button is: left:calc( 0.33/14 * carouselWidth) 
+  * The second is: left:calc((2 * 0.33/14 * carouselWidth) + (carouselWidth/9)) .... and so on.
   * 
   */
 
-    '.footerButton1':`{ left:calc( 0.25/14 * carouselWidth) }`,  // to find all the margins: carouselWidth - 6 * carouselWidth/8 ==> carouselWidth 
+    '.footerButton1':`{ left:calc( 0.33/14 * carouselWidth) }`,  // to find all the margins: carouselWidth - 6 * carouselWidth/8 ==> carouselWidth 
 
-    '.footerButton2':`{ left:calc((2 * 0.25/14 * carouselWidth) + (carouselWidth/8)) }`,
+    '.footerButton2':`{ left:calc((2 * 0.33/14 * carouselWidth) + (carouselWidth/9)) }`,
 
-    '.footerButton3':`{ left:calc((3 * 0.25/14 * carouselWidth) + (2 * carouselWidth/8)); }`,
+    '.footerButton3':`{ left:calc((3 * 0.33/14 * carouselWidth) + (2 * carouselWidth/9)); }`,
 
-    '.footerButton4':`{ left:calc((4 * 0.25/14 * carouselWidth) + (3 * carouselWidth/8)); }`,
+    '.footerButton4':`{ left:calc((4 * 0.33/14 * carouselWidth) + (3 * carouselWidth/9)); }`,
 
-    '.footerButton5':`{ left:calc((5 * 0.25/14 * carouselWidth) + (4* carouselWidth/8)); }`,
+    '.footerButton5':`{ left:calc((5 * 0.33/14 * carouselWidth) + (4* carouselWidth/9)); }`,
 
-    '.footerButton6':`{ left:calc((6 * 0.25/14 * carouselWidth) + (5 * carouselWidth/8)); }`,
+    '.footerButton6':`{ left:calc((6 * 0.33/14 * carouselWidth) + (5 * carouselWidth/9)); }`,
 
     '.footerTextWrapper':`{
         width: calc(carouselWidth*0.825);
@@ -552,7 +553,7 @@ export const css_rules = {
         width:calc(0.35*footerHeight); 
         height:calc(0.35*footerHeight);
         left:calc((0.825 * carouselWidth / 7 - (0.35*footerHeight))/2);
-        top:calc((footerHeight * 0.35 - (0.35*footerHeight))/2);
+        top:calc((-0.5)*((0.30*footerHeight - (footerHeight * 0.35)/2)));
         position:absolute; 
         display:block;
         border-radius:100%;
